@@ -1,141 +1,156 @@
-import React from 'react'
+import React from 'react';
 import { useForm } from 'react-hook-form';
-// import {toast} from "react-toastify"
-import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import {nanoid} from "nanoid"
-const Create = () => {
-    const navigate=useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  // reset
+import { nanoid } from 'nanoid';
+// import {toast} from "react-toastify" // Uncomment if using toast notifications
 
+const CreateProduct = () => {
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
   
+  // Custom theme colors for easy reference
+  const PRIMARY_BG = 'bg-[#ECE6B4]';
+  const ACCENT_COLOR = 'text-[#304F2F]';
+  const BUTTON_COLOR = 'bg-[#304F2F]';
+
   const onSubmit = data => {
-    console.log(data);
+    // 1. Assign a unique ID
+    data.id = nanoid();
+    
+    // 2. Convert price to a number (inventory is now removed)
+    data.price = parseFloat(data.price);
+    
+    // Note: data.inventory removal is handled implicitly by not registering the field.
 
-    data.id=nanoid();
-    navigate(-1)
+    console.log("New Product Data:", data);
 
-  }
+    // 3. (Optional) Save to global state or API here
+    // Example: dispatch(addProduct(data));
+
+    // 4. Show success message (if using toast)
+    // toast.success("Product created successfully!");
+
+    // 5. Reset the form fields
+    reset();
+
+    // 6. Navigate back to the previous page or to the product list
+    navigate('/admin/products'); // Consider changing this destination
+  };
 
   return (
-<div className="max-w-xl mx-auto mt-10 p-6 border rounded-lg shadow-md bg-[#ECE6B4]">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-[#304F2F]">
-        Add New Recipe
+    <div className={`max-w-xl mx-auto mt-10 p-6 border rounded-lg shadow-xl ${PRIMARY_BG}`}>
+      <h2 className={`text-3xl font-bold mb-6 text-center ${ACCENT_COLOR}`}>
+        Add New Product
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Chef Name */}
-        <input
-          type="text"
-          placeholder="Chef Name"
-          className="w-full border p-2 rounded outline-0"
-          {...register("chefName", { required: "Chef name is required" })}
-        />
-        {errors.chefName && (
-          <small className="text-red-400">{errors.chefName.message}</small>
-        )}
-
-        {/* Food Name */}
-        <input
-          type="text"
-          placeholder="Food Name"
-          className="w-full border p-2 rounded outline-0"
-          {...register("foodName", { required: "Food name is required" })}
-        />
-        {errors.foodName && (
-          <small className="text-red-400">{errors.foodName.message}</small>
-        )}
+        
+        {/* Product Name */}
+        <div>
+          <input
+            type="text"
+            placeholder="Product Name (e.g., Artisan Ceramic Mug)"
+            className="w-full border p-3 rounded outline-none focus:ring-2 focus:ring-[#304F2F]"
+            {...register("productName", { required: "Product name is required" })}
+          />
+          {errors.productName && (
+            <small className="text-red-600 font-medium">{errors.productName.message}</small>
+          )}
+        </div>
 
         {/* Image URL */}
-        <input
-          type="url"
-          placeholder="Image URL"
-          className="w-full border p-2 rounded outline-0"
-          {...register("imageUrl", { required: "Image URL is required" })}
-        />
-        {errors.imageUrl && (
-          <small className="text-red-400">{errors.imageUrl.message}</small>
-        )}
-
-        {/* Recipe Title */}
-        <input
-          type="text"
-          placeholder="Recipe Title"
-          className="w-full border p-2 rounded outline-0"
-          {...register("recipeTitle", { required: "Recipe title is required" })}
-        />
-        {errors.recipeTitle && (
-          <small className="text-red-400">{errors.recipeTitle.message}</small>
-        )}
+        <div>
+          <input
+            type="url"
+            placeholder="Main Image URL (High Resolution)"
+            className="w-full border p-3 rounded outline-none focus:ring-2 focus:ring-[#304F2F]"
+            {...register("imageUrl", { required: "Image URL is required" })}
+          />
+          {errors.imageUrl && (
+            <small className="text-red-600 font-medium">{errors.imageUrl.message}</small>
+          )}
+        </div>
 
         {/* Short Description */}
-        <textarea
-          placeholder="Short Description"
-          className="w-full border p-2 rounded outline-0"
-          rows="2"
-          {...register("shortDescription", {
-            required: "Description is required",
-          })}
-        ></textarea>
-        {errors.shortDescription && (
-          <small className="text-red-400">
-            {errors.shortDescription.message}
-          </small>
-        )}
+        <div>
+          <textarea
+            placeholder="Short Summary (1-2 sentences for product card)"
+            className="w-full border p-3 rounded outline-none focus:ring-2 focus:ring-[#304F2F]"
+            rows="2"
+            {...register("shortDescription", {
+              required: "Short description is required",
+              maxLength: { value: 150, message: "Maximum 150 characters allowed" }
+            })}
+          ></textarea>
+          {errors.shortDescription && (
+            <small className="text-red-600 font-medium">
+              {errors.shortDescription.message}
+            </small>
+          )}
+        </div>
 
-        {/* Ingredients */}
-        <textarea
-          placeholder="Ingredients (comma separated)"
-          className="w-full border p-2 rounded outline-0"
-          rows="3"
-          {...register("ingredients", {
-            required: "Ingredients are required",
-          })}
-        ></textarea>
-        {errors.ingredients && (
-          <small className="text-red-400">{errors.ingredients.message}</small>
-        )}
+        {/* Detailed Description */}
+        <div>
+          <textarea
+            placeholder="Detailed Product Description (materials, origin, care instructions)"
+            className="w-full border p-3 rounded outline-none focus:ring-2 focus:ring-[#304F2F]"
+            rows="4"
+            {...register("longDescription", {
+              required: "Detailed description is required",
+            })}
+          ></textarea>
+          {errors.longDescription && (
+            <small className="text-red-600 font-medium">{errors.longDescription.message}</small>
+          )}
+        </div>
+        
+        {/* Price Field - Now single column */}
+        <div>
+          <input
+            type="number"
+            step="0.01" // Allows for decimal values
+            placeholder="Price (₹)"
+            className="w-full border p-3 rounded outline-none focus:ring-2 focus:ring-[#304F2F]"
+            {...register("price", { 
+              required: "Price is required",
+              min: { value: 0.01, message: "Price must be greater than 0" }
+            })}
+          />
+          {errors.price && (
+            <small className="text-red-600 font-medium">{errors.price.message}</small>
+          )}
+        </div>
+        {/* Inventory field removed */}
 
-        {/* Instructions */}
-        <textarea
-          placeholder="Instructions (step by step)"
-          className="w-full border p-2 rounded outline-0"
-          rows="4"
-          {...register("instructions", {
-            required: "Instructions are required",
-          })}
-        ></textarea>
-        {errors.instructions && (
-          <small className="text-red-400">{errors.instructions.message}</small>
-        )}
 
         {/* Category */}
-        <select
-          className="w-full border p-2 rounded outline-0"
-          {...register("category", { required: "Please select a category" })}
-        >
-          <option value="">Select Category</option>
-          <option value="breakfast">Breakfast</option>
-          <option value="lunch">Lunch</option>
-          <option value="dinner">Dinner</option>
-          <option value="supper">Supper</option>
-        </select>
-        {errors.category && (
-          <small className="text-red-400">{errors.category.message}</small>
-        )}
+        <div>
+            <select
+              className="w-full border p-3 rounded outline-none focus:ring-2 focus:ring-[#304F2F]"
+              {...register("category", { required: "Please select a category" })}
+            >
+              <option value="">Select Product Category</option>
+              <option value="apparel">Apparel</option>
+              <option value="home_living">Home & Living</option>
+              <option value="wellness">Wellness</option>
+              <option value="accessories">Accessories</option>
+              <option value="limited">Limited Edition</option>
+            </select>
+            {errors.category && (
+              <small className="text-red-600 font-medium">{errors.category.message}</small>
+            )}
+        </div>
 
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-[#304F2F] text-white py-2 rounded hover:bg-[#2a4028]"
+          className={`w-full ${BUTTON_COLOR} text-white font-bold py-3 rounded-lg hover:bg-[#2a4028] transition duration-200`}
         >
-          Save Recipe
+          Publish Product
         </button>
       </form>
     </div>
-
-  )
+  );
 }
 
-export default Create
+export default CreateProduct;
