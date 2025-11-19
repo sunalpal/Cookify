@@ -31,6 +31,7 @@ const CreateProduct = () => {
     copydata.push(prod);
     setData(copydata);
 
+    localStorage.setItem("product",JSON.stringify(copydata))
     console.log("New Product Data:", prod);
 
     toast.success("Successfully Product Created");
