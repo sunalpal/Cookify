@@ -6,7 +6,9 @@ const ACCENT_TEXT = 'text-[#354F2C]'; // Deep Green
 const PRIMARY_BG = 'bg-[#EDE7B5]'; // Light Beige
 
 const About = () => {
+
   return (
+    
     <div className={`py-16 sm:py-24 ${PRIMARY_BG}`}>
       
       {/* 1. Header and Opening Statement */}

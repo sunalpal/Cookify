@@ -6,7 +6,7 @@ const CARD_BG = 'bg-white';
 
 const ProductCard = ({ product }) => {
   return (
-    <Link to={`/product/details/${product.id}`} className={`w-full  flex sm:w-[48%] md:w-[30%] lg:w-[22%] rounded-lg shadow-lg overflow-hidden ${CARD_BG} transition-transform duration-300 hover:scale-105`}>
+    <Link to={`/product/details/${product.id}`} className={`w-full  flex sm:w-[48%] md:w-[30%] lg:w-[22%] rounded-lg shadow-lg overflow-hidden ${CARD_BG} transition-transform duration-300 hover:scale-105 `}>
 
       <div className="relative  flex w-full h-60 overflow-hidden">
         <img 

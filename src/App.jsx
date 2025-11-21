@@ -3,7 +3,7 @@ import MainRoutes from "./routes/MainRoutes"
 
 const App = () => {
   return (
-    <div className=" w-full h-full  ">
+    <div className="w-full h-full ">
       <Navbar />
       <MainRoutes />
     </div>

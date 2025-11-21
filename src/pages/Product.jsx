@@ -9,7 +9,6 @@ const Product = () => {
   ))
   return (
     <div>
-
       {data.length >0 ? render:"No Product Found"}
     </div>
   )
